@@ -45,21 +45,22 @@ pipeline {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
                     sh 'sleep 15' 
                     }
-                sh 'ssh oracle@192.168.56.104 "docker ps | grep node_5"'
-                shell '''
-                           STATUS=$(curl -I http://$URI | grep 200 | awk "{print $2}")
-                           if [ $STATUS == '200' ];
-                           then
-                               echo 'STATUS 200'
-                           elif [ $STATUS == '301' ] ;
-                           then
-                               echo 'STATUS 301, CAN CONTINUE'
-                           else
-                               echo "SOMETHING WENT WRONG, RESPONCE CODE: ${STATUS} && curl -XGET http://$BUILD_URL/stop
-                           fi
-                      '''
-                
-                    }
+                catchError(stageResult: 'FAILURE') {
+                    sh 'ssh oracle@192.168.56.104 "docker ps | grep node_5"'
+                    shell '''
+                               STATUS=$(curl -I http://$URI | grep 200 | awk "{print $2}")
+                               if [ $STATUS == '200' ];
+                               then
+                                   echo 'STATUS 200'
+                               elif [ $STATUS == '301' ] ;
+                               then
+                                   echo 'STATUS 301, CAN CONTINUE'
+                               else
+                                   echo "SOMETHING WENT WRONG, RESPONCE CODE: ${STATUS} && curl -XGET http://$BUILD_URL/stop
+                               fi
+                          '''
+                        }
+                 }
         }
         
         stage('DEPLOYMENT TO DATABASE') {
