@@ -7,20 +7,22 @@ pipeline {
                 build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_STARTED')]
+                mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION STARTED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
 
             }
         }
-        stage('CHECK PREREQUIREMENTS') {
-            steps {
-                echo 'BUILD'
-                //Проверка конфигов, файлов параметров и скриптов
-            }
-        }
-
-        stage('CHECK DEPENDENCIES') {
+        
+        stage('CHECK CONFIGS') {
             steps {
                 echo 'BUILD'
                 //Проверка установленных пакетов и версий
+            }
+        }
+        
+        stage('CHECK REQUIREMENTS') {
+            steps {
+                //Проверка конфигов, файлов параметров и скриптов
+                sh "ssh oracle@192.168.56.104 bash -c '~/SCRIPTS/install-requirements.sh $NODE'"
             }
         }
 
@@ -69,9 +71,9 @@ pipeline {
                     //
                     }
                 echo "Restarting database cluster after deploy"
-                echo "Triggering job"
-                sh 'curl -XGET http://192.168.56.104:8080/job/CREDIT-CARD-DB/job/Restart%20cluster/build?token=restartpostgrestrigger'
-                sleep time: 30, unit: 'SECONDS'
+                //echo "Triggering job"
+                //sh 'curl -XGET http://192.168.56.104:8080/job/CREDIT-CARD-DB/job/Restart%20cluster/build?token=restartpostgrestrigger'
+                //sleep time: 30, unit: 'SECONDS'
             }
         }
         stage('DEPLOY TO PROD') {
@@ -114,6 +116,7 @@ pipeline {
                 build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_FINISHED')]
+                mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION FINISHED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
             }
         }
     }
