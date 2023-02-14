@@ -8,7 +8,7 @@ pipeline {
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_STARTED')]
                 mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION STARTED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
-
+                //emailextrecipients([developers()])
             }
         }
         
@@ -117,6 +117,7 @@ pipeline {
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_FINISHED')]
                 mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION FINISHED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
+                //emailextrecipients([developers()])            
             }
         }
     }
