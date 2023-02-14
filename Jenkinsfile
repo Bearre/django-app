@@ -4,7 +4,7 @@ pipeline {
         stage('PREBUILD') {
             steps {
                 echo 'Sending notifications'
-                build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: ''), \
+                build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_STARTED')]
 
@@ -44,9 +44,22 @@ pipeline {
 
                     }
                 sh 'ssh oracle@192.168.56.104 "docker ps | grep node_5"'
-                sh 'ssh oracle@192.168.56.104 "curl -s -o /dev/null -w "%{http_code}" http://192.168.56.104:8090"'
+                shell '''
+                           STATUS=$(curl -I http://$URI | grep 200 | awk "{print $2}")
+                           if [ $STATUS == '200' ];
+                           then
+                               echo 'STATUS 200'
+                           elif [ $STATUS == '301' ] ;
+                           then
+                               echo 'STATUS 301, CAN CONTINUE'
+                           else
+                               echo "SOMETHING WENT WRONG, RESPONCE CODE: ${STATUS} && curl -XGET http://$BUILD_URL/stop
+                           fi
+                      '''
+                
             }
         }
+        
         stage('DEPLOYMENT TO DATABASE') {
             when {
                 environment name: 'DEPLOY_TO_DATABASE', value: 'true'
@@ -98,7 +111,7 @@ pipeline {
         stage('POST BUILD') {
             steps {
                 //echo 'Sending mail to Urthrill@yandex.ru'
-                build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: ''), \
+                build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_FINISHED')]
             }
