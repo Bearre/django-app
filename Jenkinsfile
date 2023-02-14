@@ -41,7 +41,7 @@ pipeline {
         stage('CHECK TEST IS OK') {
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
-
+                    sh 'sleep 15' 
                     }
                 sh 'ssh oracle@192.168.56.104 "docker ps | grep node_5"'
                 shell '''
@@ -57,7 +57,7 @@ pipeline {
                            fi
                       '''
                 
-            }
+                    }
         }
         
         stage('DEPLOYMENT TO DATABASE') {
