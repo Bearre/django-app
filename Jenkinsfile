@@ -14,8 +14,7 @@ pipeline {
         
         stage('CHECK CONFIGS') {
             steps {
-                echo 'BUILD'
-                //Проверка установленных пакетов и версий
+                build job: 'CREDIT-CARD-APP/CHECK_CONFIGS'
             }
         }
         
