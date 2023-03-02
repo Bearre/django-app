@@ -19,7 +19,7 @@ pipeline {
                     
                     if (check_config_job.status == 'Failed') {
                         currentBuild.result = 'Failed'
-                        error("DID NOT PASSED CONFIG CHECK)
+                        error("DID NOT PASSED CONFIG CHECK")
                     }
                 }
             }
@@ -75,12 +75,20 @@ pipeline {
             }
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
-                    //
-                    }
+                    script {
+                        def database_deploy = build job: 'CREDIT-CARD-DB/DEPLOY_SQL_TO_DATABASE'
+                        
+                        if (check_config_job.status == 'Failed') {
+                        currentBuild.result = 'Failed'
+                        error("DEPLOY TO DATABASE FAILED")
+                        }
+                     }   
+                 } 
                 echo "Restarting database cluster after deploy"
-                //echo "Triggering job"
-                //sh 'curl -XGET http://192.168.56.104:8080/job/CREDIT-CARD-DB/job/Restart%20cluster/build?token=restartpostgrestrigger'
-                //sleep time: 30, unit: 'SECONDS'
+                echo "Triggering restart db job"
+                build job: 'CREDIT-CARD-DB/DEPLOY_SQL_TO_DATABASE'
+                echo "Waiting 30 seconds after restart"
+                sleep time: 30, unit: 'SECONDS' 
             }
         }
         stage('DEPLOY TO PROD') {
