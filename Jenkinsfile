@@ -19,7 +19,9 @@ pipeline {
                     
                     if (check_config_job.status == 'Failed') {
                         currentBuild.result = 'Failed'
-                        error("DID NOT PASSED CONFIG CHECK")
+                        ansiColor('xterm') {
+                            error("DID NOT PASSED CONFIG CHECK")
+                        }
                     }
                 }
             }
@@ -34,7 +36,9 @@ pipeline {
 
         stage('BUILD') {
             steps {
-                echo 'BUILD'
+                ansiColor('xterm') {
+                    echo 'BUILD'
+                }
             }
         }
 
@@ -78,7 +82,7 @@ pipeline {
                     script {
                         def database_deploy = build job: 'CREDIT-CARD-DB/DEPLOY_SQL_TO_DATABASE'
                         
-                        if (check_config_job.status == 'Failed') {
+                        if (database_deploy.status == 'Failed') {
                         currentBuild.result = 'Failed'
                         error("DEPLOY TO DATABASE FAILED")
                         }
@@ -108,6 +112,9 @@ pipeline {
                 //    name: 'NODE'),choice(choices: 'node_1\nnode_2\nnode_3\nnode_4',
                 //    description: '', name: 'NODE')]
                 // }
+                timeout(activity: true, time: 360, unit: 'SECONDS') {
+                    sh 'ssh oracle@192.168.56.104 "ansible-playbook -i inv-production -e "healthcheck=yes" --extra-vars "stage=prod" --tags $NODE deploy_docker_app.yaml"'
+                    }
             }
         }
         stage('STOP $NODE') {
@@ -127,6 +134,9 @@ pipeline {
         }
         stage('POST BUILD') {
             steps {
+                cleanup {
+                    cleanWs()
+                }
                 //echo 'Sending mail to Urthrill@yandex.ru'
                 build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
