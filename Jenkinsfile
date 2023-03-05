@@ -49,6 +49,17 @@ pipeline {
                     }
             }
         }
+        
+        stage('RESTART TEST') {
+            steps {
+                timeout(activity: true, time: 120, unit: 'SECONDS') {
+                    build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'node_5')]
+                    sleep 10
+                    build job: 'CREDIT-CARD-APP/START CLUSTER', parameters: [string(name: 'NODE', value: 'node_5')]
+                    sleep 10
+                    }
+            }
+        }
 
         stage('CHECK TEST IS OK') {
             steps {
@@ -107,19 +118,14 @@ pipeline {
                     }
             }
         }
-        stage('STOP $NODE') {
+        stage('RESTART APP') {
             steps {
-                timeout(activity: true, time: 30, unit: 'SECONDS') {
-                    //
+                timeout(activity: true, time: 120, unit: 'SECONDS') {
+                    build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'ALL')]
+                    sleep 10
+                    build job: 'CREDIT-CARD-APP/START CLUSTER', parameters: [string(name: 'NODE', value: 'ALL')]
+                    sleep 10
                     }
-            }
-        }
-        stage('START $NODE') {
-            steps {
-                timeout(activity: true, time: 30, unit: 'SECONDS') {
-                    //
-                    }
-                sleep time: 30, unit: 'SECONDS'
             }
         }
         
