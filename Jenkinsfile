@@ -45,7 +45,7 @@ pipeline {
         stage('DEPLOY TO TEST') {
             steps {
                 timeout(activity: true, time: 180, unit: 'SECONDS') {
-                    sh 'ssh oracle@192.168.56.104 "ansible-playbook -i inv-production -e "healthcheck=yes" --extra-vars "stage=prod" --tags node_5 deploy_docker_app.yaml"'
+                    build job: 'CREDIT-CARD-APP/DEPLOY_NEW_VERSION_APP', parameters: [string(name: 'ENVIROMENT', value: 'prod'), string(name: 'NODE', value: 'node_5'), string(name: 'BOT_TOKEN', value: '5449810276:AAGWm4kJ6FAWtNqZ2Y-VZxsPwEtSHXgWWGs'), string(name: 'CHAT_ID', value: '800772053')]
                     }
             }
         }
@@ -113,8 +113,8 @@ pipeline {
                 //    name: 'NODE'),choice(choices: 'node_1\nnode_2\nnode_3\nnode_4',
                 //    description: '', name: 'NODE')]
                 // }
-                timeout(activity: true, time: 360, unit: 'SECONDS') {
-                    sh 'ssh oracle@192.168.56.104 "ansible-playbook -i inv-production -e "healthcheck=yes" --extra-vars "stage=prod" --tags $NODE deploy_docker_app.yaml"'
+                timeout(activity: true, time: 500, unit: 'SECONDS') {
+                    build job: 'CREDIT-CARD-APP/DEPLOY_NEW_VERSION_APP', parameters: [string(name: 'ENVIROMENT', value: 'prod'), string(name: 'NODE', value: 'ALL'), string(name: 'BOT_TOKEN', value: '5449810276:AAGWm4kJ6FAWtNqZ2Y-VZxsPwEtSHXgWWGs'), string(name: 'CHAT_ID', value: '800772053')]
                     }
             }
         }
