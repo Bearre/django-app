@@ -53,23 +53,13 @@ pipeline {
         stage('CHECK TEST IS OK') {
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
-                    sh 'sleep 15' 
+                    sleep 15 
                     }
                 catchError(stageResult: 'FAILURE') {
                     sh 'ssh oracle@192.168.56.104 "docker ps | grep node_5"'
-                    shell '''
-                               STATUS=$(curl -I http://$URI | grep 200 | awk "{print $2}")
-                               if [ $STATUS == '200' ];
-                               then
-                                   echo 'STATUS 200'
-                               elif [ $STATUS == '301' ] ;
-                               then
-                                   echo 'STATUS 301, CAN CONTINUE'
-                               else
-                                   echo "SOMETHING WENT WRONG, RESPONCE CODE: ${STATUS} && curl -XGET http://$BUILD_URL/stop
-                               fi
-                          '''
-                        }
+                    sleep 15
+                    build job: 'CREDIT-CARD-APP/CHECK_URL', parameters: [string(name: 'STAGE', value: 'TEST')]
+                    }
                  }
         }
         
@@ -132,6 +122,19 @@ pipeline {
                 sleep time: 30, unit: 'SECONDS'
             }
         }
+        
+        stage('CHECK PROD IS OK') {
+            steps {
+                timeout(activity: true, time: 30, unit: 'SECONDS') {
+                    sleep 15 
+                    }
+                catchError(stageResult: 'FAILURE') {
+                    build 'CREDIT-CARD-APP/CHECK STATUS'
+                    build job: 'CREDIT-CARD-APP/CHECK_URL', parameters: [string(name: 'STAGE', value: 'PROD')]
+                    }
+                 }
+        }
+        
         stage('POST BUILD') {
             steps {
                 cleanup {
