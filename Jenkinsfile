@@ -48,7 +48,7 @@ pipeline {
             }
         }
         
-        stage('RESTART TEST') {
+        stage('RESTART TEST AFTER DEPLOY') {
             steps {
                 timeout(activity: true, time: 120, unit: 'SECONDS') {
                     build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'node_5')]
@@ -59,7 +59,7 @@ pipeline {
             }
         }
 
-        stage('CHECK TEST IS OK') {
+        stage('CHECK TEST STATUS') {
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
                     sleep 15 
@@ -116,7 +116,7 @@ pipeline {
                     }
             }
         }
-        stage('RESTART APP') {
+        stage('RESTART APP AFTER DEPLOY') {
             steps {
                 timeout(activity: true, time: 120, unit: 'SECONDS') {
                     build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'ALL')]
@@ -127,14 +127,14 @@ pipeline {
             }
         }
         
-        stage('CHECK PROD IS OK') {
+        stage('CHECK PROD STATUS') {
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
                     sleep 15 
                     }
                 catchError(stageResult: 'FAILURE') {
                     build 'CREDIT-CARD-APP/CHECK STATUS'
-                    build job: 'CREDIT-CARD-APP/CHECK_URL', parameters: [string(name: 'STAGE', value: 'PROD')]
+                    build job: 'CREDIT-CARD-APP/CHECK_URL', parameters: [string(name: 'STAGE', value: 'TEST')]
                     }
                  }
         }
