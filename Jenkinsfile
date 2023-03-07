@@ -7,7 +7,7 @@ pipeline {
                 build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_STARTED')]
-                mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION STARTED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
+                //mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION STARTED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
                 //emailextrecipients([developers()])
             }
         }
@@ -150,7 +150,7 @@ pipeline {
                 build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
                                                                              string(name: 'TEXT', value: 'PIPELINE_FINISHED')]
-                mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION FINISHED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
+                //mail bcc: '', body: 'DEPLOY $BUILD_ID OF VERSION $VERSION FINISHED', cc: '', from: '', replyTo: '', subject: 'DEPLOY CREDIT-APP VERSION $VERSION', to: 'Urthrill@yandex.ru'
                 //emailextrecipients([developers()])            
             }
         }
