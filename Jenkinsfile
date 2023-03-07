@@ -141,9 +141,7 @@ pipeline {
         
         stage('POST BUILD') {
             steps {
-                cleanup {
-                    cleanWs()
-                }
+               
                 //echo 'Sending mail to Urthrill@yandex.ru'
                 build job: 'CREDIT-CARD-APP/SEND_NOTIFICATION', parameters: [string(name: 'BOT_TOKEN', value: '$BOT_TOKEN'), \
                                                                              string(name: 'CHAT_ID', value: '800772053'), \
