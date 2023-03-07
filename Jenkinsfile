@@ -36,9 +36,7 @@ pipeline {
 
         stage('BUILD') {
             steps {
-                ansiColor('xterm') {
-                    echo 'BUILD'
-                }
+                echo 'BUILD'
             }
         }
 
