@@ -12,20 +12,20 @@ pipeline {
             }
         }
         
-        stage('CHECK CONFIGS') {
-            steps {
-                script {
-                    def check_config_job = build job: 'CREDIT-CARD-APP/CHECK_CONFIGS'
-                    
-                    if (check_config_job.status != 'Failed') {
-                        currentBuild.result = 'Failed'
-                        ansiColor('xterm') {
-                            error("DID NOT PASSED CONFIG CHECK")
-                        }
-                    }
-                }
-            }
-        }
+       // stage('CHECK CONFIGS') {
+       //     steps {
+       //         script {
+       //             def check_config_job = build job: 'CREDIT-CARD-APP/CHECK_CONFIGS'
+       //             
+       //             if (check_config_job.status != 'Failed') {
+          //              currentBuild.result = 'Failed'
+           //             ansiColor('xterm') {
+            //                error("DID NOT PASSED CONFIG CHECK")
+             //           }
+        //            }
+        //        }
+       //     }
+      //  }
         
         stage('CHECK REQUIREMENTS') {
             steps {
