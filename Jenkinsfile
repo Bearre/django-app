@@ -140,7 +140,7 @@ pipeline {
                 //    description: '', name: 'NODE')]
                 // }
                 timeout(activity: true, time: 500, unit: 'SECONDS') {
-                    build job: 'CREDIT-CARD-APP/DEPLOY_NEW_VERSION_APP', parameters: [string(name: 'ENVIROMENT', value: 'prod'), string(name: 'NODE', value: 'node_3'), string(name: 'BOT_TOKEN', value: '5449810276:AAGWm4kJ6FAWtNqZ2Y-VZxsPwEtSHXgWWGs'), string(name: 'CHAT_ID', value: '800772053')]
+                    build job: 'CREDIT-CARD-APP/DEPLOY_NEW_VERSION_APP', parameters: [string(name: 'ENVIROMENT', value: 'prod'), string(name: 'NODE', value: 'node_2'), string(name: 'BOT_TOKEN', value: '5449810276:AAGWm4kJ6FAWtNqZ2Y-VZxsPwEtSHXgWWGs'), string(name: 'CHAT_ID', value: '800772053')]
                     sleep 30
                     }
             }
@@ -149,16 +149,16 @@ pipeline {
         stage('CHECK REQUIREMENTS') {
             steps {
                 //Проверка конфигов, файлов параметров и скриптов
-                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh node_3'"
+                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh node_2'"
             }
         }
         
         stage('RESTART APP AFTER DEPLOY') {
             steps {
                 timeout(activity: true, time: 120, unit: 'SECONDS') {
-                    build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'NODE_3')]
+                    build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'NODE_2')]
                     sleep 10
-                    build job: 'CREDIT-CARD-APP/START CLUSTER', parameters: [string(name: 'NODE', value: 'NODE_3')]
+                    build job: 'CREDIT-CARD-APP/START CLUSTER', parameters: [string(name: 'NODE', value: 'NODE_2')]
                     sleep 10
                     }
             }
