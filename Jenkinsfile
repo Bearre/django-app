@@ -27,12 +27,12 @@ pipeline {
        //     }
       //  }
         
-        stage('CHECK REQUIREMENTS') {
-            steps {
-                //Проверка конфигов, файлов параметров и скриптов
-                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh $NODE'"
-            }
-        }
+      //  stage('CHECK REQUIREMENTS') {
+      //    steps {
+      //          //Проверка конфигов, файлов параметров и скриптов
+      //          sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh $NODE'"
+      //      }
+      //  }
 
         stage('BUILD') {
             steps {
@@ -116,6 +116,14 @@ pipeline {
                     }
             }
         }
+        
+        stage('CHECK REQUIREMENTS') {
+            steps {
+                //Проверка конфигов, файлов параметров и скриптов
+                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh $NODE'"
+            }
+        }
+        
         stage('RESTART APP AFTER DEPLOY') {
             steps {
                 timeout(activity: true, time: 120, unit: 'SECONDS') {
