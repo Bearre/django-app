@@ -106,11 +106,12 @@ pipeline {
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
                     script {
-                        def database_deploy = build job: 'CREDIT-CARD-DB/DEPLOY_SQL_TO_DATABASE'
+                        //def database_deploy = build job: 'CREDIT-CARD-DB/DEPLOY_SQL_TO_DATABASE'
+                        build job: 'CREDIT-CARD-DB/DEPLOY_SQL_TO_DATABASE'
                         
-                        if (database_deploy.status == 'Failed') {
-                        currentBuild.result = 'Failed'
-                        error("DEPLOY TO DATABASE FAILED")
+                        //if (database_deploy.status == 'Failed') {
+                        //currentBuild.result = 'Failed'
+                        //error("DEPLOY TO DATABASE FAILED")
                         }
                      }   
                  } 
