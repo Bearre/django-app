@@ -148,7 +148,7 @@ pipeline {
         stage('CHECK REQUIREMENTS') {
             steps {
                 //Проверка конфигов, файлов параметров и скриптов
-                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh TEST "
+                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh TEST'"
             }
         }
         
