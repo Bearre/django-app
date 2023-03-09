@@ -156,9 +156,9 @@ pipeline {
         stage('RESTART APP AFTER DEPLOY') {
             steps {
                 timeout(activity: true, time: 120, unit: 'SECONDS') {
-                    build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: $NODE)]
+                    build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'NODE_3')]
                     sleep 10
-                    build job: 'CREDIT-CARD-APP/START CLUSTER', parameters: [string(name: 'NODE', value: $NODE)]
+                    build job: 'CREDIT-CARD-APP/START CLUSTER', parameters: [string(name: 'NODE', value: 'NODE_3')]
                     sleep 10
                     }
             }
