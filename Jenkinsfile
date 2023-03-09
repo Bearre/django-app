@@ -112,7 +112,7 @@ pipeline {
                         //if (database_deploy.status == 'Failed') {
                         //currentBuild.result = 'Failed'
                         //error("DEPLOY TO DATABASE FAILED")
-                        }
+                        //}
                      }   
                  } 
                 echo "Restarting database cluster after deploy"
