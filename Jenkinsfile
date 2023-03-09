@@ -41,6 +41,11 @@ pipeline {
         }
 
         stage('DEPLOY TO TEST') {
+            when {
+                expression {
+                    return env.NODE == 'TEST';
+                }
+            }
             steps {
                 timeout(activity: true, time: 180, unit: 'SECONDS') {
                     build job: 'CREDIT-CARD-APP/DEPLOY_NEW_VERSION_APP', parameters: [string(name: 'ENVIROMENT', value: 'prod'), string(name: 'NODE', value: 'node_5'), string(name: 'BOT_TOKEN', value: '5449810276:AAGWm4kJ6FAWtNqZ2Y-VZxsPwEtSHXgWWGs'), string(name: 'CHAT_ID', value: '800772053')]
@@ -48,7 +53,24 @@ pipeline {
             }
         }
         
+        stage('CHECK REQUIREMENTS ON TEST') {
+            when {
+                expression {
+                    return env.NODE == 'TEST';
+                }
+            }
+            steps {
+                //Проверка конфигов, файлов параметров и скриптов
+                sh "ssh oracle@192.168.56.104 '~/SCRIPTS/install-requirements.sh TEST'"
+            }
+        }
+        
         stage('RESTART TEST AFTER DEPLOY') {
+            when {
+                expression {
+                    return env.NODE == 'TEST';
+                }
+            }
             steps {
                 timeout(activity: true, time: 120, unit: 'SECONDS') {
                     build job: 'CREDIT-CARD-APP/STOP CLUSTER', parameters: [string(name: 'NODE', value: 'node_5')]
@@ -60,6 +82,11 @@ pipeline {
         }
 
         stage('CHECK TEST STATUS') {
+            when {
+                expression {
+                    return env.NODE == 'TEST';
+                }
+            }
             steps {
                 timeout(activity: true, time: 30, unit: 'SECONDS') {
                     sleep 15 
